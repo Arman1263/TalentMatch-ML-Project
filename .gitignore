@@ -35,3 +35,9 @@ Thumbs.db
 # Testing
 .coverage
 htmlcov/
+
+.env
+*.env
+__pycache__/
+*.py[cod]
+.venv/

@@ -10,3 +10,17 @@ pydantic-settings
 [python -m pip install -r requirements.txt]
 
 use python -m before pip like this --  python -m pip list
+
+-- database part
+we are using postgre for this project and created a db in postgresql 18 with the name of talentmatch_db
+
+- lets connect postgresql with fastapi SQLAlchemy 2.0 + Psycopg 3
+
+- for that i updated the requirements and added these
+sqlalchemy
+psycopg[binary]
+alembic
+
+-- sql password with path stored in .env folder of backend
+-- postgresql password contains @ thats why giving an error we fixed it by converting it into numbers
+
