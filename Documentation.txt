@@ -1,0 +1,12 @@
+- created a folder structure and some __init__.py files in backend/app dir
+- upgraded pip version and created-activated virual env [.\.venv\Scripts\Activate.ps1]
+
+- wrote dependencies in requirenments.txt and downloaded [pip install -r backend/requirements.txt]
+fastapi
+uvicorn[standard]
+pydantic-settings
+
+- error - pip installation broken so fixed this by using some commands and changed download command too
+[python -m pip install -r requirements.txt]
+
+use python -m before pip like this --  python -m pip list
