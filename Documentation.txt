@@ -51,3 +51,14 @@ login -- access token -- authorize -- logout
 data of pdf files will stored in sql db
 
 resume endpoint also done, recruiter cant access
+
+
+{
+  "email": "recruiter@test.com",
+  "password": "TestPassword123!"
+}
+
+{
+  "email": "candidate@test.com",
+  "password": "TestPassword123!"
+}
