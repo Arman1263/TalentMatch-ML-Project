@@ -24,3 +24,15 @@ alembic
 -- sql password with path stored in .env folder of backend
 -- postgresql password contains @ thats why giving an error we fixed it by converting it into numbers
 
+## authentication and authorization -->
+we are using jwt authentication
+
+updated dependencies -->
+PyJWT
+email-validator
+
+download command ->
+python -c "import sys; sys.path.insert(0, r'.venv\Lib\site-packages'); from pip._internal.cli.main import main; sys.exit(main())" install -r backend/requirements.txt
+
+added auth files in app folder and generated SECRET_KEY and stored in backend/.env
+
