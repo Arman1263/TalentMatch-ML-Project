@@ -36,3 +36,18 @@ python -c "import sys; sys.path.insert(0, r'.venv\Lib\site-packages'); from pip.
 
 added auth files in app folder and generated SECRET_KEY and stored in backend/.env
 
+recruiter and candidate endpoints are done with login and registration
+
+# Core Application APIs-->
+work start with pdf files
+
+updated requirements--
+PyMuPDF
+python-docx
+
+registration and login with candidate and recruiter
+login -- access token -- authorize -- logout 
+
+data of pdf files will stored in sql db
+
+resume endpoint also done, recruiter cant access
