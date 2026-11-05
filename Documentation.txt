@@ -57,8 +57,10 @@ resume endpoint also done, recruiter cant access
   "email": "recruiter@test.com",
   "password": "TestPassword123!"
 }
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0OTY0YmIzMS1iMzU0LTRlMjMtYTFhYi00YTg5NDA4YWU1ZDUiLCJleHAiOjE3OTM4NzE5MTd9.eB4n6tOgQtN-r9PsCKWTjFEvdFByCyRS4HZTrchoWsQ
 
 {
   "email": "candidate@test.com",
   "password": "TestPassword123!"
 }
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMDNhMjJmYS0zZDg5LTRhODQtYTY0MS1lOTU5MjhmZjI1OGEiLCJleHAiOjE3OTM4NzI2NjB9.W6GuDm6T-n_pBEIQO4SUnzpLs3KB_TjGZP8Q_67NY3Y
