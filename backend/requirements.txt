@@ -10,3 +10,8 @@ email-validator
 python-multipart
 PyMuPDF
 python-docx
+scikit-learn
+numpy
+spacy
+sentence-transformers
+pytest

@@ -63,4 +63,20 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0OTY0YmIzMS1iMzU0LTRlMjMtYTFhYi0
   "email": "candidate@test.com",
   "password": "TestPassword123!"
 }
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMDNhMjJmYS0zZDg5LTRhODQtYTY0MS1lOTU5MjhmZjI1OGEiLCJleHAiOjE3OTM4NzI2NjB9.W6GuDm6T-n_pBEIQO4SUnzpLs3KB_TjGZP8Q_67NY3Y
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMDNhMjJmYS0zZDg5LTRhODQtYTY0MS1lOTU5MjhmZjI1OGEiLCJleHAiOjE3OTM5NDY5NTh9.0eXslzWmzjE7QbhJ8TPbBGPHb52GECMZrZcQERof5gs
+
+
+# job id -- 5440de7b-853a-40bf-bc7e-dcc8171418e7
+
+
+{
+  "email": "anotherrecruiter@test.com",
+  "password": "TestPassword123!"
+}
+
+{
+  "email": "anotherrecruiter@test.com",
+  "password": "TestPassword123!",
+  "role": "recruiter",
+  "full_name": "Arman Amir Shikalgar"
+}

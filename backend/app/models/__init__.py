@@ -66,6 +66,11 @@ class CandidateProfile(Base):
         cascade="all, delete-orphan"
     )
     applications = relationship("Application", back_populates="candidate")
+    match_results = relationship(
+        "MatchResult",
+        back_populates="candidate",
+        cascade="all, delete-orphan"
+    )
 
 
 # 3. RECRUITER PROFILE
@@ -184,6 +189,11 @@ class MatchResult(Base):
             "candidate_id", "job_id",
             name="uq_candidate_job_match"
         ),
+    )
+
+    candidate = relationship(
+        "CandidateProfile",
+        back_populates="match_results"
     )
 
     id: Mapped[uuid.UUID] = mapped_column(
