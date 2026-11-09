@@ -80,3 +80,22 @@ def test_match_resume_to_job():
     assert result["missing_skills"] == [
         "AWS", "Machine Learning"
     ]
+
+
+def test_clean_text_preserves_technical_keywords():
+    from app.services.ml.preprocessing import clean_text
+
+    result = clean_text("Python, C++, C#, .NET, Node.js, SQL!")
+
+    assert result == "python cplusplus csharp dotnet nodejs sql"
+
+
+def test_clean_text_removes_emails_and_urls():
+    from app.services.ml.preprocessing import clean_text
+
+    result = clean_text(
+        "Contact me at test@example.com or visit https://example.com"
+    )
+
+    assert "test@example.com" not in result
+    assert "https" not in result

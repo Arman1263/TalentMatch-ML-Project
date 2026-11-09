@@ -1,3 +1,4 @@
+
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -9,6 +10,7 @@ from app.models import (
     Application,
     CandidateProfile,
     Job,
+    MatchResult,
     RecruiterProfile,
     User
 )
@@ -16,6 +18,7 @@ from app.schemas.application import (
     ApplicationCreate,
     ApplicationResponse,
     ApplicationStatusUpdate,
+    CandidateApplicationResponse,
     RecruiterApplicationResponse
 )
 from app.services.application_service import apply_for_job
@@ -41,7 +44,6 @@ def create_application(
     ).first()
 
     if not candidate:
-        from fastapi import HTTPException
         raise HTTPException(
             status_code=404,
             detail="Candidate profile not found"
@@ -56,7 +58,7 @@ def create_application(
 
 @router.get(
     "/my-applications",
-    response_model=list[ApplicationResponse]
+    response_model=list[CandidateApplicationResponse]
 )
 def get_my_applications(
     db: Session = Depends(get_db),
@@ -67,15 +69,51 @@ def get_my_applications(
     ).first()
 
     if not candidate:
-        from fastapi import HTTPException
         raise HTTPException(
             status_code=404,
             detail="Candidate profile not found"
         )
 
-    return db.query(Application).filter(
-        Application.candidate_id == candidate.id
-    ).order_by(Application.applied_at.desc()).all()
+    applications = (
+        db.query(
+            Application,
+            Job.title,
+            Job.company_name,
+            Job.location,
+            MatchResult.matching_score
+        )
+        .join(Job, Application.job_id == Job.id)
+        .outerjoin(
+            MatchResult,
+            (MatchResult.candidate_id == Application.candidate_id)
+            & (MatchResult.job_id == Application.job_id)
+        )
+        .filter(Application.candidate_id == candidate.id)
+        .order_by(Application.applied_at.desc())
+        .all()
+    )
+
+    return [
+        CandidateApplicationResponse(
+            id=application.id,
+            candidate_id=application.candidate_id,
+            job_id=application.job_id,
+            status=application.status,
+            applied_at=application.applied_at,
+            job_title=job_title,
+            company_name=company_name,
+            job_location=job_location,
+            matching_score=float(matching_score)
+            if matching_score is not None else None
+        )
+        for (
+            application,
+            job_title,
+            company_name,
+            job_location,
+            matching_score
+        ) in applications
+    ]
 
 
 @router.get(

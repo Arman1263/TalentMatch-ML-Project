@@ -1,8 +1,21 @@
+
+from functools import lru_cache
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
+
 from app.services.ml.preprocessing import clean_text
 from app.services.ml.skill_extractor import extract_skills, extract_job_skills
+
+
+@lru_cache(maxsize=1)
+def get_semantic_model() -> SentenceTransformer:
+    """
+    Load the Sentence Transformer model only when first needed.
+    Reuse the cached model for subsequent requests.
+    """
+    return SentenceTransformer("all-MiniLM-L6-v2")
 
 
 def calculate_skills_match(
@@ -39,6 +52,7 @@ def calculate_skills_match(
         "missing_skills": missing
     }
 
+
 def calculate_tfidf_similarity(
     resume_text: str,
     job_description: str
@@ -72,10 +86,6 @@ def calculate_tfidf_similarity(
         return 0.0
 
 
-# Load model once when the module is imported
-semantic_model = SentenceTransformer("all-MiniLM-L6-v2")
-
-
 def calculate_semantic_similarity(
     resume_text: str,
     job_description: str
@@ -87,7 +97,9 @@ def calculate_semantic_similarity(
     if not resume_text.strip() or not job_description.strip():
         return 0.0
 
-    embeddings = semantic_model.encode(
+    model = get_semantic_model()
+
+    embeddings = model.encode(
         [resume_text, job_description],
         normalize_embeddings=True
     )
@@ -118,7 +130,6 @@ def calculate_hybrid_score(
     return round(hybrid_score, 2)
 
 
-
 def match_resume_to_job(
     resume_text: str,
     job_description: str,
@@ -129,15 +140,12 @@ def match_resume_to_job(
     with automatic resume skill extraction.
     """
 
-    # Clean text
     cleaned_resume = clean_text(resume_text)
     cleaned_job = clean_text(job_description)
 
-    # Automatically extract resume skills
     resume_skills = extract_skills(resume_text)
     job_skills = extract_job_skills(job_description, required_skills)
 
-    # Calculate individual scores
     tfidf_score = calculate_tfidf_similarity(
         cleaned_resume,
         cleaned_job
@@ -153,7 +161,6 @@ def match_resume_to_job(
         job_skills
     )
 
-    # Calculate hybrid score
     hybrid_score = calculate_hybrid_score(
         tfidf_score,
         semantic_score,

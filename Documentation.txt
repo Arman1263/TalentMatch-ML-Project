@@ -80,3 +80,16 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMDNhMjJmYS0zZDg5LTRhODQtYTY0MS1
   "role": "recruiter",
   "full_name": "Arman Amir Shikalgar"
 }
+
+
+## recruiter
+{
+  "email": "armanshikalgar01@gmail.com",
+  "password": "Arman@9556"
+}
+
+## candidate
+{
+  "email": "utkarshshinde01@gmail.com",
+  "password": "Utkarsh@9556"
+}

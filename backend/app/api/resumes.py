@@ -1,7 +1,14 @@
+
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
+from fastapi import (
+    APIRouter,
+    Depends,
+    UploadFile,
+    File,
+    HTTPException,
+)
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -42,7 +49,10 @@ async def upload_resume(
         candidate = current_user.candidate_profile
 
         if not candidate:
-            raise HTTPException(400, "Candidate profile not found")
+            raise HTTPException(
+                status_code=400,
+                detail="Candidate profile not found"
+            )
 
         filename = f"{uuid.uuid4()}{extension}"
         file_path = STORAGE_DIR / filename
@@ -51,7 +61,7 @@ async def upload_resume(
 
         extracted_text = extract_resume_text(str(file_path))
 
-        # Make the newly uploaded resume active
+        # Make the newly uploaded resume active.
         db.query(Resume).filter(
             Resume.candidate_id == candidate.id
         ).update(
@@ -77,17 +87,35 @@ async def upload_resume(
             "extracted_text_length": len(extracted_text)
         }
 
-    except ValueError as error:
+    except HTTPException:
         db.rollback()
+
         if file_path and file_path.exists():
             file_path.unlink()
-        raise HTTPException(400, str(error))
+
+        raise
+
+    except ValueError as error:
+        db.rollback()
+
+        if file_path and file_path.exists():
+            file_path.unlink()
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
 
     except Exception:
         db.rollback()
+
         if file_path and file_path.exists():
             file_path.unlink()
-        raise HTTPException(500, "Resume upload failed")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Resume upload failed"
+        )
 
     finally:
         await file.close()
