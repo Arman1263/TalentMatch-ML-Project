@@ -17,9 +17,21 @@ export interface Application {
   applied_at: string;
 }
 
+/** Extended application returned by GET /applications/my-applications */
+export interface CandidateApplication extends Application {
+  job_title: string;
+  company_name: string;
+  job_location: string | null;
+  matching_score: number | null;
+}
+
+/** Extended application returned by GET /applications/received */
 export interface RecruiterApplication extends Application {
   candidate_name: string;
   candidate_email: string;
+  job_title: string;
+  company_name: string;
+  matching_score: number | null;
 }
 
 // Candidate: Apply for a job
@@ -33,16 +45,18 @@ export const applyForJob = async (
   return response.data;
 };
 
-// Candidate: Get own applications
-export const getMyApplications = async (): Promise<Application[]> => {
-  const response = await api.get<Application[]>(
+// Candidate: Get own applications (with job details and matching score)
+export const getMyApplications = async (): Promise<
+  CandidateApplication[]
+> => {
+  const response = await api.get<CandidateApplication[]>(
     "/applications/my-applications"
   );
 
   return response.data;
 };
 
-// Recruiter: Get received applications
+// Recruiter: Get received applications (with candidate info, job details, and matching score)
 export const getReceivedApplications = async (): Promise<
   RecruiterApplication[]
 > => {

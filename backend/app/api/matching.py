@@ -5,22 +5,16 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.dependencies import require_role
-from app.models import CandidateProfile, User
-from app.schemas.matching import MatchResponse
-from app.services.matching_service import generate_match
-from app.services.matching_service import generate_match, get_match_history
-from app.schemas.matching import MatchResponse, MatchHistoryResponse
-
 from app.models import CandidateProfile, RecruiterProfile, User
 from app.schemas.matching import (
     MatchResponse,
     MatchHistoryResponse,
-    RecruiterMatchResponse
+    RecruiterMatchResponse,
 )
 from app.services.matching_service import (
     generate_match,
     get_match_history,
-    get_job_candidates
+    get_job_candidates,
 )
 
 
@@ -30,32 +24,9 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "/{job_id}",
-    response_model=MatchResponse
-)
-def match_job(
-    job_id: UUID,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("candidate"))
-):
-    candidate = db.query(CandidateProfile).filter(
-        CandidateProfile.user_id == current_user.id
-    ).first()
-
-    if not candidate:
-        from fastapi import HTTPException, status
-
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Candidate profile not found"
-        )
-
-    return generate_match(
-        db=db,
-        candidate=candidate,
-        job_id=job_id
-    )
+# NOTE: Static routes MUST be declared before parameterised routes so that
+# FastAPI does not try to parse the literal path segment "my-matches" as a
+# UUID job_id and return 422.
 
 
 @router.get(
@@ -104,5 +75,31 @@ def get_ranked_candidates(
     return get_job_candidates(
         db=db,
         recruiter_id=recruiter.id,
+        job_id=job_id
+    )
+
+
+@router.post(
+    "/{job_id}",
+    response_model=MatchResponse
+)
+def match_job(
+    job_id: UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("candidate"))
+):
+    candidate = db.query(CandidateProfile).filter(
+        CandidateProfile.user_id == current_user.id
+    ).first()
+
+    if not candidate:
+        raise HTTPException(
+            status_code=404,
+            detail="Candidate profile not found"
+        )
+
+    return generate_match(
+        db=db,
+        candidate=candidate,
         job_id=job_id
     )

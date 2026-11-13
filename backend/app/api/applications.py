@@ -138,7 +138,10 @@ def get_received_applications(
         db.query(
             Application,
             CandidateProfile.full_name,
-            User.email
+            User.email,
+            Job.title,
+            Job.company_name,
+            MatchResult.matching_score
         )
         .join(Job, Application.job_id == Job.id)
         .join(
@@ -146,6 +149,11 @@ def get_received_applications(
             Application.candidate_id == CandidateProfile.id
         )
         .join(User, CandidateProfile.user_id == User.id)
+        .outerjoin(
+            MatchResult,
+            (MatchResult.candidate_id == Application.candidate_id)
+            & (MatchResult.job_id == Application.job_id)
+        )
         .filter(Job.recruiter_id == recruiter.id)
         .order_by(Application.applied_at.desc())
         .all()
@@ -159,9 +167,20 @@ def get_received_applications(
             status=application.status,
             applied_at=application.applied_at,
             candidate_name=full_name,
-            candidate_email=email
+            candidate_email=email,
+            job_title=job_title,
+            company_name=company_name,
+            matching_score=float(matching_score)
+            if matching_score is not None else None
         )
-        for application, full_name, email in applications
+        for (
+            application,
+            full_name,
+            email,
+            job_title,
+            company_name,
+            matching_score
+        ) in applications
     ]
 
 

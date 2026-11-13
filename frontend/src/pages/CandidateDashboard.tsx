@@ -18,6 +18,7 @@ import WorkOutlined from "@mui/icons-material/WorkOutlined";
 import DescriptionOutlined from "@mui/icons-material/DescriptionOutlined";
 import AutoAwesome from "@mui/icons-material/AutoAwesome";
 import AssignmentOutlined from "@mui/icons-material/AssignmentOutlined";
+import PersonOutlined from "@mui/icons-material/PersonOutlined";
 
 import { useAuth } from "../context/AuthContext";
 import {
@@ -75,6 +76,23 @@ function CandidateDashboard() {
     },
   ];
 
+  const navCards = [
+    {
+      icon: <WorkOutlined color="primary" />,
+      title: "Explore Jobs",
+      description: "Discover jobs that match your skills and experience.",
+      buttonLabel: "Browse Jobs",
+      path: "/candidate/jobs",
+    },
+    {
+      icon: <AssignmentOutlined color="primary" />,
+      title: "My Applications",
+      description: "Track your submitted applications and matching scores.",
+      buttonLabel: "View Applications",
+      path: "/candidate/applications",
+    },
+  ];
+
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
       <AppBar position="static" color="inherit" elevation={0}>
@@ -114,17 +132,29 @@ function CandidateDashboard() {
               elevation={0}
               sx={{ p: 3, mb: 3, border: "1px solid #E2E8F0" }}
             >
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Profile Overview
-              </Typography>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 2 }}>
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                    Profile Overview
+                  </Typography>
 
-              <Typography color="text.secondary" sx={{ mt: 1 }}>
-                {dashboard.profile?.headline || "Add a professional headline"}
-              </Typography>
+                  <Typography color="text.secondary" sx={{ mt: 1 }}>
+                    {dashboard.profile?.headline || "Add a professional headline"}
+                  </Typography>
 
-              <Typography color="text.secondary">
-                {dashboard.profile?.location || "Add your location"}
-              </Typography>
+                  <Typography color="text.secondary">
+                    {dashboard.profile?.location || "Add your location"}
+                  </Typography>
+                </Box>
+
+                <Button
+                  variant="outlined"
+                  startIcon={<PersonOutlined />}
+                  onClick={() => navigate("/candidate/profile")}
+                >
+                  Edit Profile
+                </Button>
+              </Box>
             </Paper>
 
             {/* Dashboard Statistics */}
@@ -179,7 +209,7 @@ function CandidateDashboard() {
               </Typography>
 
               <Typography color="text.secondary" sx={{ mt: 1 }}>
-                Average score across your generated job matches.
+                Average heuristic compatibility score across your job matches.
               </Typography>
             </Paper>
 
@@ -195,51 +225,30 @@ function CandidateDashboard() {
                 gap: 3,
               }}
             >
-              {/* Browse Jobs */}
-              <Paper
-                elevation={0}
-                sx={{ p: 3, border: "1px solid #E2E8F0" }}
-              >
-                <WorkOutlined color="primary" />
-
-                <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
-                  Explore Jobs
-                </Typography>
-
-                <Typography color="text.secondary" sx={{ mt: 1, mb: 2 }}>
-                  Discover jobs that match your skills and experience.
-                </Typography>
-
-                <Button
-                  variant="contained"
-                  onClick={() => navigate("/candidate/jobs")}
+              {navCards.map((card) => (
+                <Paper
+                  key={card.title}
+                  elevation={0}
+                  sx={{ p: 3, border: "1px solid #E2E8F0" }}
                 >
-                  Browse Jobs
-                </Button>
-              </Paper>
+                  {card.icon}
 
-              {/* My Applications */}
-              <Paper
-                elevation={0}
-                sx={{ p: 3, border: "1px solid #E2E8F0" }}
-              >
-                <AssignmentOutlined color="primary" />
+                  <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
+                    {card.title}
+                  </Typography>
 
-                <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
-                  My Applications
-                </Typography>
+                  <Typography color="text.secondary" sx={{ mt: 1, mb: 2 }}>
+                    {card.description}
+                  </Typography>
 
-                <Typography color="text.secondary" sx={{ mt: 1, mb: 2 }}>
-                  Track your submitted applications and matching scores.
-                </Typography>
-
-                <Button
-                  variant="contained"
-                  onClick={() => navigate("/candidate/applications")}
-                >
-                  View Applications
-                </Button>
-              </Paper>
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate(card.path)}
+                  >
+                    {card.buttonLabel}
+                  </Button>
+                </Paper>
+              ))}
             </Box>
           </>
         )}

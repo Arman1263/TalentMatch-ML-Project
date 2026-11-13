@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Alert,
@@ -27,6 +28,7 @@ import {
 
 function RecruiterDashboard() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const [dashboard, setDashboard] =
     useState<RecruiterDashboardResponse | null>(null);
@@ -89,16 +91,22 @@ function RecruiterDashboard() {
       icon: <WorkOutlined color="primary" />,
       title: "Manage Jobs",
       description: "Create, edit, and manage your job postings.",
-    },
-    {
-      icon: <PeopleOutlined color="primary" />,
-      title: "Candidate Matches",
-      description: "Discover candidates ranked by AI matching scores.",
+      action: () => navigate("/recruiter/jobs"),
+      buttonLabel: "Manage Jobs",
     },
     {
       icon: <AssignmentOutlined color="primary" />,
       title: "Applications",
       description: "Review applications and manage hiring progress.",
+      action: () => navigate("/recruiter/applications"),
+      buttonLabel: "View Applications",
+    },
+    {
+      icon: <PeopleOutlined color="primary" />,
+      title: "Candidate Matches",
+      description: "Discover candidates ranked by AI matching scores.",
+      action: () => navigate("/recruiter/jobs"),
+      buttonLabel: "View Jobs",
     },
   ];
 
@@ -206,9 +214,16 @@ function RecruiterDashboard() {
                     {feature.title}
                   </Typography>
 
-                  <Typography color="text.secondary" sx={{ mt: 1 }}>
+                  <Typography color="text.secondary" sx={{ mt: 1, mb: 2 }}>
                     {feature.description}
                   </Typography>
+
+                  <Button
+                    variant="contained"
+                    onClick={feature.action}
+                  >
+                    {feature.buttonLabel}
+                  </Button>
                 </Paper>
               ))}
             </Box>

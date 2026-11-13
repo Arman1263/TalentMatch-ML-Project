@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import JobManagement from "./pages/recruiter/JobManagement";
 import JobListings from "./pages/candidate/JobListings";
 import JobDetails from "./pages/candidate/JobDetails";
+import MyApplications from "./pages/candidate/MyApplications";
 
 function App() {
   return (
@@ -40,6 +41,11 @@ function App() {
         <Route
           path="/candidate/jobs/:jobId"
           element={<JobDetails />}
+        />
+
+        <Route
+          path="/candidate/applications"
+          element={<MyApplications />}
         />
       </Route>
 

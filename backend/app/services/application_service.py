@@ -89,8 +89,9 @@ def apply_for_job(
 
         raise
 
-    # 5. Generate ML matching result.
-    # Application remains valid even if ML matching fails.
+    # 5. Generate ML matching result asynchronously.
+    # The application is already committed and remains valid even if ML
+    # matching fails — matching can be retried via POST /matching/{job_id}.
     try:
         generate_match(
             db=db,
@@ -98,9 +99,9 @@ def apply_for_job(
             job_id=job.id
         )
     except Exception:
-        db.rollback()
-
-        # Do not silently lose the application.
-        # Matching can be retried separately.
+        # Do NOT rollback here — that would silently delete the application
+        # that was already committed in step 4. The match failure is
+        # non-fatal; the candidate can retry matching manually.
+        pass
 
     return application
